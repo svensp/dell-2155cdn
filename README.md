@@ -41,8 +41,8 @@ let
   dell2155cdn = pkgs.callPackage (pkgs.fetchFromGitHub {
     owner = "svensp";
     repo = "dell-2155cdn";
-    rev = "1.0.0-rc2";  # Use specific tag or commit hash
-    sha256 = "0i937nvh72yd1c1763i1c3zmhs6di1i89a2qj7apclqk1lyccb6p";
+    rev = "1.0.0-rc3";  # Use specific tag or commit hash
+    sha256 = "16s688xsd798k3rhmjmpy4fhaz0gj197zrykz9nd9nj6hjkd09g0";
   } + "/printer-dell-2155cdn.nix") {
     pkgsi686Linux = pkgs.pkgsi686Linux;
     driverZip = ./06_2155_Driver_Linux.zip;  # Path to the manually downloaded driver
