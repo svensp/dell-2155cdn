@@ -37,8 +37,8 @@ let
   dell2155cdn = pkgs.callPackage (pkgs.fetchFromGitHub {
     owner = "svensp";
     repo = "dell-2155cdn";
-    rev = "1.0.0-rc1";  # Use specific tag or commit hash
-    sha256 = "0qql4x2v2bpq1n4km2f13c0mwdvc3ah3kkfsm44c5mxh2aw31ggw";
+    rev = "1.0.0-rc2";  # Use specific tag or commit hash
+    sha256 = "0i937nvh72yd1c1763i1c3zmhs6di1i89a2qj7apclqk1lyccb6p";
   } + "/printer-dell-2155cdn.nix") {
     pkgsi686Linux = pkgs.pkgsi686Linux;
   };
