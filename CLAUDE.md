@@ -322,7 +322,8 @@ If `patchelf` fails in `postFixup`:
 
 ## Version History
 
-- **1.0.0-rc5**: Current release - Hash format fixed to hexadecimal (tag in repository)
+- **1.0.0**: Stable release - driverZip parameter with hexadecimal hash verification (tag in repository)
+- **1.0.0-rc5**: Hash format fixed to hexadecimal (tag in repository)
 - **1.0.0-rc4**: Incorrect hash format (base32 vs hex) (tag in repository)
 - **1.0.0-rc3**: driverZip parameter with hash verification (incorrect hash) (tag in repository)
 - **1.0.0-rc2**: requireFile approach (tag in repository)
