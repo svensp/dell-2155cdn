@@ -1,10 +1,12 @@
 # Dell 2155cdn Color MFP Driver for NixOS
 
-This package provides the proprietary Dell driver for the Dell 2155cdn Color MFP printer on NixOS, with support for **color printing**.
+This package provides the proprietary Dell driver for the Dell 2155cdn Color MFP printer on NixOS, with support for
+**color printing**.
 
 ## Why This Package?
 
-The Dell 2155cdn requires proprietary 32-bit filter binaries for full color support. Generic PCL drivers only support grayscale printing. This package:
+The Dell 2155cdn requires proprietary 32-bit filter binaries for full color support. Generic PCL drivers only support
+grayscale printing. This package:
 
 - ✅ Patches 32-bit binaries for NixOS compatibility
 - ✅ Enables full color printing support
@@ -15,9 +17,11 @@ The Dell 2155cdn requires proprietary 32-bit filter binaries for full color supp
 
 ### Step 1: Download the Dell driver manually
 
-Due to Dell's download restrictions (403 Forbidden), the driver cannot be downloaded automatically. You must download it manually:
+Due to Dell's download restrictions (403 Forbidden), the driver cannot be downloaded automatically. You must download it
+manually:
 
-1. Visit the [Dell 2155cdn driver page](https://www.dell.com/support/home/product-support/product/dell-2155cn-multifunction-color-printer/drivers)
+1. Visit the
+   [Dell 2155cdn driver page](https://www.dell.com/support/home/product-support/product/dell-2155cn-multifunction-color-printer/drivers)
 2. Download the "Dell 2155cn/cdn Color Laser MFP Driver" for Linux (`06_2155_Driver_Linux.zip`)
 3. Add it to the Nix store:
    ```bash
