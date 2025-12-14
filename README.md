@@ -25,7 +25,7 @@ let
     owner = "svensp";
     repo = "dell-2155cdn";
     rev = "1.0.0-rc1";  # Use specific tag or commit hash
-    sha256 = "";  # nix-prefetch-url --unpack https://github.com/svensp/dell-2155cdn/archive/1.0.0-rc1.tar.gz
+    sha256 = "0qql4x2v2bpq1n4km2f13c0mwdvc3ah3kkfsm44c5mxh2aw31ggw";
   } + "/printer-dell-2155cdn.nix") {
     pkgsi686Linux = pkgs.pkgsi686Linux;
   };
