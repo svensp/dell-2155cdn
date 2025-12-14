@@ -23,10 +23,10 @@ manually:
 1. Visit the
    [Dell 2155cdn driver page](https://www.dell.com/support/home/product-support/product/dell-2155cn-multifunction-color-printer/drivers)
 2. Download the "Dell 2155cn/cdn Color Laser MFP Driver" for Linux (`06_2155_Driver_Linux.zip`)
-3. Add it to the Nix store:
-   ```bash
-   nix-store --add-fixed sha256 06_2155_Driver_Linux.zip
-   ```
+3. Place it in your NixOS configuration directory (e.g., `/etc/nixos/06_2155_Driver_Linux.zip`)
+
+**Tip:** You can keep this file in a private git repository alongside your NixOS configuration for easy deployment to
+multiple machines.
 
 ### Step 2: Configure NixOS
 
@@ -45,6 +45,7 @@ let
     sha256 = "0i937nvh72yd1c1763i1c3zmhs6di1i89a2qj7apclqk1lyccb6p";
   } + "/printer-dell-2155cdn.nix") {
     pkgsi686Linux = pkgs.pkgsi686Linux;
+    driverZip = ./06_2155_Driver_Linux.zip;  # Path to the manually downloaded driver
   };
 in
 {
@@ -57,7 +58,7 @@ in
 }
 ```
 
-### Option 2: Local installation
+#### Option 2: Local installation
 
 Clone this repository and reference it locally:
 
@@ -65,6 +66,7 @@ Clone this repository and reference it locally:
 let
   dell2155cdn = pkgs.callPackage /path/to/printer-dell-2155cdn.nix {
     pkgsi686Linux = pkgs.pkgsi686Linux;
+    driverZip = ./06_2155_Driver_Linux.zip;  # Path to the manually downloaded driver
   };
 in
 {

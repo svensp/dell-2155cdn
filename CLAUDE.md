@@ -13,12 +13,16 @@ procedures for maintaining and updating this package.
 
 - **Driver Version**: 1.0-1 (Dell's official version number)
 - **Package Type**: Unfree/proprietary 32-bit Linux driver
-- **Manual Download Required**: Dell blocks automatic downloads (403 Forbidden), users must download and add to Nix
-  store manually
+- **Manual Download Required**: Dell blocks automatic downloads (403 Forbidden), users must download and pass file path
+  as parameter
 - **Source File**: `06_2155_Driver_Linux.zip` (ZIP containing RPM package)
 - **Architecture**: 32-bit binaries patched to run on 64-bit NixOS
+- **Deployment**: File can be version-controlled in private git repositories alongside NixOS configurations
 
-## Updating the Driver (When Dell Releases New Version)
+## Updating the Driver (If Dell Releases New Version)
+
+**Note**: The Dell 2155cdn driver is over 13 years old. Updates are unlikely, but these procedures apply to any
+packaging changes.
 
 ### 1. Download and Verify New Driver
 
@@ -26,27 +30,20 @@ procedures for maintaining and updating this package.
 # Download manually from Dell support page
 # Visit: https://www.dell.com/support/home/product-support/product/dell-2155cn-multifunction-color-printer/drivers
 
-# Add to Nix store to calculate hash
-nix-store --add-fixed sha256 06_2155_Driver_Linux.zip
-
-# Note the output path and hash
-```
-
-### 2. Calculate New SHA256 Hash
-
-```bash
-# If the filename changed or you need to verify the hash
+# Calculate hash for documentation purposes
 nix-hash --type sha256 --base32 --flat 06_2155_Driver_Linux.zip
 ```
+
+### 2. Verify File Integrity
+
+Keep the expected SHA256 hash documented in the nix file comments for users to verify their download.
 
 ### 3. Update printer-dell-2155cdn.nix
 
 Edit the following fields:
 
 - `version` - Update to new Dell version (e.g., "1.1-1")
-- `src.name` - Update if filename changed
-- `src.url` - Update if Dell changed the download URL
-- `src.sha256` - Update with new hash from step 2
+- Update the expected SHA256 comment if hash changed
 
 ### 4. Check for RPM Filename Changes
 
@@ -86,11 +83,11 @@ If paths changed, update the `installPhase` accordingly.
 ### 1. Build the Package
 
 ```bash
-# From repository root
-nix-build printer-dell-2155cdn.nix
-
-# Or using nix build (Flakes)
-nix-build -E 'with import <nixpkgs> {}; callPackage ./printer-dell-2155cdn.nix { inherit pkgsi686Linux; }'
+# From repository root, with driver file in current directory
+nix-build -E 'with import <nixpkgs> {}; callPackage ./printer-dell-2155cdn.nix {
+  inherit pkgsi686Linux;
+  driverZip = ./06_2155_Driver_Linux.zip;
+}'
 ```
 
 ### 2. Verify Build Output
@@ -135,6 +132,7 @@ Test in a VM or on the target system:
 let
   dell2155cdn = pkgs.callPackage /path/to/printer-dell-2155cdn.nix {
     pkgsi686Linux = pkgs.pkgsi686Linux;
+    driverZip = ./06_2155_Driver_Linux.zip;  # Path to driver file
   };
 in
 {
@@ -204,40 +202,31 @@ git push origin main
 git push origin 1.1.0 --force
 ```
 
-## Handling Manual Download Requirement (requireFile)
+## Handling Manual Download Requirement
 
-The `requireFile` function is used because Dell's servers return 403 Forbidden for automated downloads. This is
-intentional and documented.
+The driver file must be downloaded manually because Dell's servers return 403 Forbidden for automated downloads. The
+package accepts the file path as a parameter (`driverZip`).
 
 ### For Users
 
-The `requireFile` message (lines 14-23 in printer-dell-2155cdn.nix) provides:
+Users download the file once and place it alongside their NixOS configuration. Benefits:
 
-- Clear explanation of why manual download is needed
-- Direct link to Dell support page
-- Exact command to add file to Nix store
+- File can be version-controlled in private git repositories
+- Configuration is portable - copy to new machines with the config
+- More declarative than requireFile approach
+- No need to remember nix-store commands
 
 ### For Maintainers
 
-When updating:
+When updating documentation:
 
 1. **Verify download URL** - Test that the URL still works manually
-2. **Update message** - If Dell changes their support page structure, update the URL in the message
-3. **Test requireFile** - Remove the file from Nix store and verify the error message is clear:
-   ```bash
-   # This should fail with the requireFile message
-   nix-build printer-dell-2155cdn.nix
-   ```
+2. **Update README** - If Dell changes their support page structure, update the URL
+3. **Document expected hash** - Keep SHA256 hash in nix file comments for user verification
 
 ### Alternative: Hosting the Driver
 
-If Dell's download becomes completely unavailable:
-
-1. Host the ZIP file on GitHub releases or another service
-2. Replace `requireFile` with `fetchurl`
-3. Update documentation accordingly
-
-Example:
+If Dell's download becomes completely unavailable, you could host the file on GitHub releases and use `fetchurl`:
 
 ```nix
 src = fetchurl {

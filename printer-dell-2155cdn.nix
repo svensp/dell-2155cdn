@@ -1,4 +1,48 @@
-{ stdenv, lib, requireFile, unzip, rpm, cpio, patchelf, pkgsi686Linux }:
+{ stdenv, lib, unzip, rpm, cpio, patchelf, pkgsi686Linux, driverZip ? null }:
+
+let
+  expectedHash = "1xz0kd83ndandxwxipqcg1wljc0if208zgckahywxkdsvvajyg8n";
+
+  driverSrc = if driverZip == null then
+    throw ''
+      Dell 2155cdn driver file not provided.
+
+      This driver cannot be downloaded automatically due to Dell's download restrictions (403 Forbidden).
+      Please download it manually and pass it as a parameter.
+
+      Steps:
+        1. Download from: https://www.dell.com/support/home/product-support/product/dell-2155cn-multifunction-color-printer/drivers
+        2. Look for "Dell 2155cn/cdn Color Laser MFP Driver" for Linux (06_2155_Driver_Linux.zip)
+        3. Place it in your NixOS configuration directory (e.g., /etc/nixos/)
+        4. Pass it to this package:
+
+           dell2155cdn = pkgs.callPackage ... {
+             pkgsi686Linux = pkgs.pkgsi686Linux;
+             driverZip = ./06_2155_Driver_Linux.zip;
+           };
+
+      Expected SHA256: ${expectedHash}
+    ''
+  else
+    let
+      actualHash = builtins.hashFile "sha256" driverZip;
+    in
+      if actualHash != expectedHash then
+        throw ''
+          Dell 2155cdn driver file hash mismatch!
+
+          Expected SHA256: ${expectedHash}
+          Actual SHA256:   ${actualHash}
+
+          The provided file does not match the expected Dell 2155cdn driver.
+          Please verify you downloaded the correct file from:
+            https://www.dell.com/support/home/product-support/product/dell-2155cn-multifunction-color-printer/drivers
+
+          Look for "Dell 2155cn/cdn Color Laser MFP Driver" for Linux (06_2155_Driver_Linux.zip)
+        ''
+      else
+        driverZip;
+in
 
 stdenv.mkDerivation rec {
   pname = "dell-2155cdn-driver";
@@ -6,22 +50,9 @@ stdenv.mkDerivation rec {
 
   # Source: Dell 2155cdn Linux driver package
   # Note: Direct download from Dell is blocked (403 Forbidden).
-  # Users must download manually and add to Nix store.
-  src = requireFile {
-    name = "06_2155_Driver_Linux.zip";
-    url = "https://dl.dell.com/FOLDER00411421M/1/06_2155_Driver_Linux.zip";
-    sha256 = "1xz0kd83ndandxwxipqcg1wljc0if208zgckahywxkdsvvajyg8n";
-    message = ''
-      This driver cannot be downloaded automatically due to Dell's download restrictions.
-      Please download it manually from:
-        https://www.dell.com/support/home/product-support/product/dell-2155cn-multifunction-color-printer/drivers
-
-      Look for "Dell 2155cn/cdn Color Laser MFP Driver" for Linux.
-
-      After downloading, add it to the Nix store using:
-        nix-store --add-fixed sha256 06_2155_Driver_Linux.zip
-    '';
-  };
+  # Users must download manually and pass the file path as driverZip parameter.
+  # Hash verification is performed automatically.
+  src = driverSrc;
 
   nativeBuildInputs = [ unzip rpm cpio patchelf ];
 
