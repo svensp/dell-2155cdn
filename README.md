@@ -13,7 +13,20 @@ The Dell 2155cdn requires proprietary 32-bit filter binaries for full color supp
 
 ## Installation
 
-### Option 1: Using this repository (recommended)
+### Step 1: Download the Dell driver manually
+
+Due to Dell's download restrictions (403 Forbidden), the driver cannot be downloaded automatically. You must download it manually:
+
+1. Visit the [Dell 2155cdn driver page](https://www.dell.com/support/home/product-support/product/dell-2155cn-multifunction-color-printer/drivers)
+2. Download the "Dell 2155cn/cdn Color Laser MFP Driver" for Linux (`06_2155_Driver_Linux.zip`)
+3. Add it to the Nix store:
+   ```bash
+   nix-store --add-fixed sha256 06_2155_Driver_Linux.zip
+   ```
+
+### Step 2: Configure NixOS
+
+#### Option 1: Using this repository (recommended)
 
 Add this to your `/etc/nixos/configuration.nix`:
 
@@ -60,13 +73,13 @@ in
 }
 ```
 
-### Step 2: Rebuild your system
+### Step 3: Rebuild your system
 
 ```bash
 sudo nixos-rebuild switch
 ```
 
-### 3. Add the printer
+### Step 4: Add the printer
 
 You can add the printer via:
 

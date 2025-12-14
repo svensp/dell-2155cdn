@@ -1,34 +1,27 @@
-{ stdenv, lib, fetchurl, unzip, rpm, cpio, patchelf, pkgsi686Linux }:
+{ stdenv, lib, requireFile, unzip, rpm, cpio, patchelf, pkgsi686Linux }:
 
 stdenv.mkDerivation rec {
   pname = "dell-2155cdn-driver";
   version = "1.0-1";
 
   # Source: Dell 2155cdn Linux driver package
-  # Original URL: https://dl.dell.com/FOLDER00411421M/1/06_2155_Driver_Linux.zip
-  # Note: Direct download from Dell may be blocked (403).
-  # Options:
-  #   1. Host the file on GitHub releases and update the URL below
-  #   2. Download manually and use requireFile (see commented code below)
-  src = fetchurl {
+  # Note: Direct download from Dell is blocked (403 Forbidden).
+  # Users must download manually and add to Nix store.
+  src = requireFile {
+    name = "06_2155_Driver_Linux.zip";
     url = "https://dl.dell.com/FOLDER00411421M/1/06_2155_Driver_Linux.zip";
     sha256 = "1xz0kd83ndandxwxipqcg1wljc0if208zgckahywxkdsvvajyg8n";
-  };
+    message = ''
+      This driver cannot be downloaded automatically due to Dell's download restrictions.
+      Please download it manually from:
+        https://www.dell.com/support/home/product-support/product/dell-2155cn-multifunction-color-printer/drivers
 
-  # Alternative: Use requireFile to force manual download
-  # Uncomment this and comment out the fetchurl above if needed:
-  # src = requireFile {
-  #   name = "06_2155_Driver_Linux.zip";
-  #   url = "https://dl.dell.com/FOLDER00411421M/1/06_2155_Driver_Linux.zip";
-  #   sha256 = "1xz0kd83ndandxwxipqcg1wljc0if208zgckahywxkdsvvajyg8n";
-  #   message = ''
-  #     This driver cannot be downloaded automatically.
-  #     Please download it manually from:
-  #       https://www.dell.com/support/home/de-de/product-support/product/dell-2155cn-multifunction-color-printer/drivers
-  #     and add it to the Nix store using:
-  #       nix-store --add-fixed sha256 06_2155_Driver_Linux.zip
-  #   '';
-  # };
+      Look for "Dell 2155cn/cdn Color Laser MFP Driver" for Linux.
+
+      After downloading, add it to the Nix store using:
+        nix-store --add-fixed sha256 06_2155_Driver_Linux.zip
+    '';
+  };
 
   nativeBuildInputs = [ unzip rpm cpio patchelf ];
 
