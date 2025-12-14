@@ -30,20 +30,20 @@ packaging changes.
 # Download manually from Dell support page
 # Visit: https://www.dell.com/support/home/product-support/product/dell-2155cn-multifunction-color-printer/drivers
 
-# Calculate hash for documentation purposes
-nix-hash --type sha256 --base32 --flat 06_2155_Driver_Linux.zip
+# Calculate hash for documentation purposes (use hex format for builtins.hashFile compatibility)
+sha256sum 06_2155_Driver_Linux.zip
 ```
 
 ### 2. Verify File Integrity
 
-Keep the expected SHA256 hash documented in the nix file comments for users to verify their download.
+Keep the expected SHA256 hash in hexadecimal format in the nix file (compatible with `builtins.hashFile`).
 
 ### 3. Update printer-dell-2155cdn.nix
 
 Edit the following fields:
 
 - `version` - Update to new Dell version (e.g., "1.1-1")
-- Update the expected SHA256 comment if hash changed
+- `expectedHash` - Update with new SHA256 hash in hexadecimal format (use `sha256sum`, not `nix-hash --base32`)
 
 ### 4. Check for RPM Filename Changes
 

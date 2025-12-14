@@ -1,7 +1,8 @@
 { stdenv, lib, unzip, rpm, cpio, patchelf, pkgsi686Linux, driverZip ? null }:
 
 let
-  expectedHash = "1m1f1m34xiz39i33gdsgxyb7idgp0jj6mp48761v9hy8z3irza3a";
+  # Expected SHA256 hash in hexadecimal format (compatible with builtins.hashFile)
+  expectedHash = "6aa89fe3f8c8c3b4833988dc6aa404f7b57896ef4fb737464ce3c74e460d2ed4";
 
   driverSrc = if driverZip == null then
     throw ''
