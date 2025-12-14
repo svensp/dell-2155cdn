@@ -322,7 +322,8 @@ If `patchelf` fails in `postFixup`:
 
 ## Version History
 
-- **1.0.0-rc3**: Current release - driverZip parameter with hash verification (tag in repository)
+- **1.0.0-rc4**: Current release - Correct driver file SHA256 hash (tag in repository)
+- **1.0.0-rc3**: driverZip parameter with hash verification (incorrect hash) (tag in repository)
 - **1.0.0-rc2**: requireFile approach (tag in repository)
 - **1.0.0-rc1**: Initial release (tag in repository)
 
